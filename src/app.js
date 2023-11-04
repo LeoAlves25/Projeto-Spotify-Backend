@@ -14,6 +14,6 @@ app.use("/faq", faqRoutes);
 app.use("/user", userRoutes);
 app.use("/playlist", playlistRoutes);
 
-app.listen(3000, () => {
-  console.log("Server está rodando da porta 3000");
+app.listen(3002, () => {
+  console.log("Server está rodando da porta 3002");
 });
