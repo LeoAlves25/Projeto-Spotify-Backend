@@ -36,7 +36,7 @@ playlistController.getPublicPlaylists = (req, res) => {
 }
 
 playlistController.getPrivatePlaylistsByUser = (req, res) => {
-  const id_user = req.body.id_user;
+  const id_user = req.params.id;
 
   Playlist.getPrivatePlaylistsByUser(id_user, (err, playlists) => {
     if (err) {

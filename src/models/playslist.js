@@ -50,7 +50,7 @@ Playlist.getPrivatePlaylistsByUser = async (id_user, callback) => {
       `SELECT p.*, u.firstName, u.email
       FROM playlists p
       JOIN user u ON u.id_user = p.id_user
-      WHERE public <> 0 AND p.id_user = ?`,
+      WHERE public <> 1 AND p.id_user = ?`,
       [id_user]
     )
     .then((result) => {
