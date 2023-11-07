@@ -44,10 +44,12 @@ User.getUserByEmail = async (email, callback) => {
 };
 
 User.getUserByEmailAndPassword = async (email, password, callback) => {
+  console.log("email", email);
+  
   await db
     .query(
-      `SELECT * FROM user 
-            WHERE email = ? AND password = ?`,
+      `SELECT * FROM \`user\` 
+            WHERE email = ? AND \`password\` = ?`,
       [email, password]
     )
     .then((result) => {
