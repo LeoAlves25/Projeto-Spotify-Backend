@@ -5,6 +5,7 @@ import userController from "../controllers/userController.js";
 
 router.get("/", userController.getAllUsers);
 router.post("/", userController.postUser);
+router.put("/",userController.putUser);
 router.get("/email=:email", userController.getUserByEmail);
 router.post("/login", userController.getUserByEmailAndPassword);
 

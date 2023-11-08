@@ -13,7 +13,7 @@ dotenv.config()
 const db = mysql.createConnection({
     host: "localhost",
     user: 'root',
-    password: "12345678",
+    password: "cacapirocaA!1",
     database: "spotify",
 }).promise();
 
