@@ -24,6 +24,19 @@ playlistController.getAllPlaylistsWithUser = (req, res) => {
   });
 };
 
+playlistController.getPlaylistsByUser = (req, res) => {
+  const id = req.params.id;
+
+  Playlist.getPlaylistsByUser(id, (err, playlist) => {
+    if (err) {
+      console.error("Erro ao buscar as Playlists:", err);
+      res.status(500).json({ error: "Erro no servidor" });
+    } else {
+      res.json(playlist);
+    }
+  });
+};
+
 playlistController.getPublicPlaylists = (req, res) => {
   Playlist.getPublicPlaylists((err, playlists) => {
     if (err) {
@@ -33,7 +46,7 @@ playlistController.getPublicPlaylists = (req, res) => {
       res.json(playlists);
     }
   });
-}
+};
 
 playlistController.getPrivatePlaylistsByUser = (req, res) => {
   const id_user = req.params.id;
@@ -46,11 +59,11 @@ playlistController.getPrivatePlaylistsByUser = (req, res) => {
       res.json(playlists);
     }
   });
-}
+};
 
 playlistController.getPlaylistById = (req, res) => {
   const id = req.params.id;
-  
+
   Playlist.getPlaylistById(id, (err, playlist) => {
     if (err) {
       console.error("Erro ao buscar as Playlists:", err);

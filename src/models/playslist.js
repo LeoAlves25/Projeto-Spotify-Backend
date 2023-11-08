@@ -75,6 +75,38 @@ Playlist.getPrivatePlaylistsByUser = async (id_user, callback) => {
 
 }
 
+Playlist.getPlaylistsByUser = async (id_user, callback) => {
+  console.log(id_user)
+  await db
+    .query(
+      `SELECT p.*, u.firstName, u.email
+      FROM playlists p
+      JOIN user u ON u.id_user = p.id_user
+      WHERE p.id_user = ?`,
+      [id_user]
+    )
+    .then((result) => {
+      const playlistsWithUser = result[0].map((playlist) => ({
+        id: playlist.id_playlists,
+        nome_playlist: playlist.nome_playlist,
+        descricao: playlist.descricao,
+        capa: playlist.capa,
+        public: playlist.public,
+        criador: {
+          id: playlist.id_user,
+          firstName: playlist.firstName,
+          email: playlist.email,
+        },
+      }));
+      callback(null, playlistsWithUser);
+    })
+    .catch((err) => {
+      console.log(err)
+      callback(err, null);
+    });
+
+}
+
 Playlist.getAllPlaylistsWithUser = async (callback) => {
   await db
     .query(
