@@ -43,15 +43,14 @@ Playlist.getPublicPlaylists = async (callback) => {
 
 }
 
-Playlist.getPrivatePlaylistsByUser = async (id_user, callback) => {
-  console.log(id_user)
+Playlist.getPrivatePlaylistsByUser = async (email, callback) => {
   await db
     .query(
       `SELECT p.*, u.firstName, u.email
       FROM playlists p
       JOIN user u ON u.id_user = p.id_user
-      WHERE public <> 1 AND p.id_user = ?`,
-      [id_user]
+      WHERE public <> 1 AND u.email = ?`,
+      [email]
     )
     .then((result) => {
       const playlistsWithUser = result[0].map((playlist) => ({
@@ -75,15 +74,15 @@ Playlist.getPrivatePlaylistsByUser = async (id_user, callback) => {
 
 }
 
-Playlist.getPlaylistsByUser = async (id_user, callback) => {
-  console.log(id_user)
+Playlist.getPlaylistsByUser = async (email, callback) => {
+  console.log(email)
   await db
     .query(
       `SELECT p.*, u.firstName, u.email
       FROM playlists p
       JOIN user u ON u.id_user = p.id_user
-      WHERE p.id_user = ?`,
-      [id_user]
+      WHERE u.email = ?`,
+      [email]
     )
     .then((result) => {
       const playlistsWithUser = result[0].map((playlist) => ({
@@ -145,8 +144,8 @@ Playlist.getPlaylistById = async (id, callback) => {
             ))
         ) AS result
         FROM playlists p
-            JOIN playlists_musics pm ON p.id_playlists = pm.id_playlists
-            JOIN musics m ON pm.id_musics = m.id_musics
+            LEFT JOIN playlists_musics pm ON p.id_playlists = pm.id_playlists
+            LEFT JOIN musics m ON pm.id_musics = m.id_musics
             JOIN user u ON p.id_user = u.id_user
             WHERE p.id_playlists = ?;`,
             [id]

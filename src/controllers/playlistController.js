@@ -25,7 +25,7 @@ playlistController.getAllPlaylistsWithUser = (req, res) => {
 };
 
 playlistController.getPlaylistsByUser = (req, res) => {
-  const id = req.params.id;
+  const id = req.params.email;
 
   Playlist.getPlaylistsByUser(id, (err, playlist) => {
     if (err) {
@@ -49,9 +49,9 @@ playlistController.getPublicPlaylists = (req, res) => {
 };
 
 playlistController.getPrivatePlaylistsByUser = (req, res) => {
-  const id_user = req.params.id;
+  const email = req.params.email;
 
-  Playlist.getPrivatePlaylistsByUser(id_user, (err, playlists) => {
+  Playlist.getPrivatePlaylistsByUser(email, (err, playlists) => {
     if (err) {
       console.error("Erro ao buscar as Playlists:", err);
       res.status(500).json({ error: "Erro no servidor" });
