@@ -26,6 +26,19 @@ userController.postUser = (req, res) => {
   });
 };
 
+userController.putUser = (req, res) =>{
+  const user = req.body;
+  console.log(user)
+  User.putUser(user,(err, result) => {
+    if (err) {
+      console.error("Erro ao atualizar o usuario", err);
+      res.status(500).json({ error: "Erro no servidor" });
+    } else {
+      res.json(result);
+    }
+  });
+};
+
 userController.getUserByEmail = (req, res) => {
   const email = req.params.email;
 

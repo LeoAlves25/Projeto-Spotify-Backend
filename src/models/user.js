@@ -28,6 +28,21 @@ User.postUser = async (user, callback) => {
     });
 };
 
+User.putUser = async (user,callback) =>{
+  await db.query(`
+  UPDATE user
+  SET firstName = ?, lastName = ?, email = ?, password = ?
+  WHERE id_user = ?
+  `,[user.firstName,user.lastName,user.email,user.password,user.id_user]
+  )
+  .then((result) => {
+    callback(null, true);
+  })
+  .catch((err) => {
+    callback(err, false);
+  });
+}
+
 User.getUserByEmail = async (email, callback) => {
   await db
     .query(
