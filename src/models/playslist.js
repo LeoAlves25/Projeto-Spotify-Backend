@@ -46,9 +46,9 @@ Playlist.getPlaylistById = async (id, callback) => {
     .query(
       `SELECT
         JSON_OBJECT(
-            'playlist', JSON_OBJECT('id_playlists', p.id_playlists, 'nome_playlist', p.nome_playlist, 'descricao', p.descricao, 'capa', p.capa, 'public', p.public,
-            'criador', JSON_OBJECT('id_user', u.id_user, 'firstName', u.firstName, 'lastName', u.lastName, 'email', u.email, 'password', password),
-            'musicas', JSON_ARRAYAGG(JSON_OBJECT('id_musics', m.id_musics, 'titulo', m.titulo, 'artista', m.artista, 'duracao', m.duracao, 'nome_arquivo_audio', nome_arquivo_audio)
+            'playlist', JSON_OBJECT('id', p.id_playlists, 'nome_playlist', p.nome_playlist, 'descricao', p.descricao, 'capa', p.capa, 'public', p.public,
+            'criador', JSON_OBJECT('id', u.id_user, 'firstName', u.firstName, 'lastName', u.lastName, 'email', u.email, 'password', password),
+            'musicas', JSON_ARRAYAGG(JSON_OBJECT('id', m.id_musics, 'titulo', m.titulo, 'artista', m.artista, 'duracao', m.duracao, 'nome_arquivo_audio', nome_arquivo_audio)
             ))
         ) AS result
         FROM playlists p
