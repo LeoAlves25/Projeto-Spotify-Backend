@@ -13,6 +13,99 @@ Playlist.getAllPlaylists = async (callback) => {
     });
 };
 
+Playlist.getPublicPlaylists = async (callback) => {
+  await db
+    .query(
+      `SELECT p.*, u.firstName, u.email
+      FROM playlists p
+      JOIN user u ON u.id_user = p.id_user
+      WHERE public = 1`
+    )
+    .then((result) => {
+      const playlistsWithUser = result[0].map((playlist) => ({
+        id: playlist.id_playlists,
+        nome_playlist: playlist.nome_playlist,
+        descricao: playlist.descricao,
+        capa: playlist.capa,
+        public: playlist.public,
+        criador: {
+          id: playlist.id_user,
+          firstName: playlist.firstName,
+          email: playlist.email,
+        },
+      }));
+      callback(null, playlistsWithUser);
+    })
+    .catch((err) => {
+      console.log(err)
+      callback(err, null);
+    });
+
+}
+
+Playlist.getPrivatePlaylistsByUser = async (email, callback) => {
+  await db
+    .query(
+      `SELECT p.*, u.firstName, u.email
+      FROM playlists p
+      JOIN user u ON u.id_user = p.id_user
+      WHERE public <> 1 AND u.email = ?`,
+      [email]
+    )
+    .then((result) => {
+      const playlistsWithUser = result[0].map((playlist) => ({
+        id: playlist.id_playlists,
+        nome_playlist: playlist.nome_playlist,
+        descricao: playlist.descricao,
+        capa: playlist.capa,
+        public: playlist.public,
+        criador: {
+          id: playlist.id_user,
+          firstName: playlist.firstName,
+          email: playlist.email,
+        },
+      }));
+      callback(null, playlistsWithUser);
+    })
+    .catch((err) => {
+      console.log(err)
+      callback(err, null);
+    });
+
+}
+
+Playlist.getPlaylistsByUser = async (email, callback) => {
+  console.log(email)
+  await db
+    .query(
+      `SELECT p.*, u.firstName, u.email
+      FROM playlists p
+      JOIN user u ON u.id_user = p.id_user
+      WHERE u.email = ?`,
+      [email]
+    )
+    .then((result) => {
+      const playlistsWithUser = result[0].map((playlist) => ({
+        id: playlist.id_playlists,
+        nome_playlist: playlist.nome_playlist,
+        descricao: playlist.descricao,
+        capa: playlist.capa,
+        public: playlist.public,
+        criador: {
+          id: playlist.id_user,
+          firstName: playlist.firstName,
+          email: playlist.email,
+        },
+      }));
+      callback(null, playlistsWithUser);
+    })
+    .catch((err) => {
+      console.log(err)
+      callback(err, null);
+    });
+
+}
+
 Playlist.getAllPlaylistsWithUser = async (callback) => {
   await db
     .query(
@@ -22,15 +115,14 @@ Playlist.getAllPlaylistsWithUser = async (callback) => {
     )
     .then((result) => {
       const playlistsWithUser = result[0].map((playlist) => ({
-        id_playlists: playlist.id_playlists,
+        id: playlist.id_playlists,
         nome_playlist: playlist.nome_playlist,
         descricao: playlist.descricao,
         capa: playlist.capa,
         public: playlist.public,
         criador: {
-          id_user: playlist.id_user,
+          id: playlist.id_user,
           firstName: playlist.firstName,
-          lastName: playlist.lastName,
           email: playlist.email,
         },
       }));
@@ -46,14 +138,14 @@ Playlist.getPlaylistById = async (id, callback) => {
     .query(
       `SELECT
         JSON_OBJECT(
-            'playlist', JSON_OBJECT('id_playlists', p.id_playlists, 'nome_playlist', p.nome_playlist, 'descricao', p.descricao, 'capa', p.capa, 'public', p.public,
-            'criador', JSON_OBJECT('id_user', u.id_user, 'firstName', u.firstName, 'lastName', u.lastName, 'email', u.email, 'password', password),
-            'musicas', JSON_ARRAYAGG(JSON_OBJECT('id_musics', m.id_musics, 'titulo', m.titulo, 'artista', m.artista, 'duracao', m.duracao, 'nome_arquivo_audio', nome_arquivo_audio)
+            'playlist', JSON_OBJECT('id', p.id_playlists, 'nome_playlist', p.nome_playlist, 'descricao', p.descricao, 'capa', p.capa, 'public', p.public,
+            'criador', JSON_OBJECT('id', u.id_user, 'firstName', u.firstName, 'lastName', u.lastName, 'email', u.email, 'password', password),
+            'musicas', JSON_ARRAYAGG(JSON_OBJECT('id', m.id_musics, 'titulo', m.titulo, 'artista', m.artista, 'duracao', m.duracao, 'nome_arquivo_audio', nome_arquivo_audio)
             ))
         ) AS result
         FROM playlists p
-            JOIN playlists_musics pm ON p.id_playlists = pm.id_playlists
-            JOIN musics m ON pm.id_musics = m.id_musics
+            LEFT JOIN playlists_musics pm ON p.id_playlists = pm.id_playlists
+            LEFT JOIN musics m ON pm.id_musics = m.id_musics
             JOIN user u ON p.id_user = u.id_user
             WHERE p.id_playlists = ?;`,
             [id]

@@ -61,7 +61,6 @@ User.getUserByEmail = async (email, callback) => {
 };
 
 User.getUserByEmailAndPassword = async (email, password, callback) => {
-  console.log("email", email);
   
   await db
     .query(
