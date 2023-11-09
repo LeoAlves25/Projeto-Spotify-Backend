@@ -29,12 +29,14 @@ User.postUser = async (user, callback) => {
     });
 };
 
-User.putUser = async (user,callback) =>{ 
+User.putUser = async (user,callback) =>{
+  console.log(user)
+  console.log("aki")
   await db.query(`
   UPDATE user
   SET firstName = ?, lastName = ?, email = ?, password = ?
   WHERE id_user = ?
-  `,[user.firstName,user.lastName,user.email,user.password,user.id]
+  `,[user.firstName,user.lastName,user.email,user.password,user.user_id]
   )
   .then((result) => {
     callback(null, true);

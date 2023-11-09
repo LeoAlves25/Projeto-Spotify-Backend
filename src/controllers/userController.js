@@ -29,6 +29,7 @@ userController.postUser = (req, res) => {
 userController.putUser = (req, res) =>{
   const user = req.body;
   console.log(user)
+  console.log("aqui 2")
   User.putUser(user,(err, result) => {
     if (err) {
       console.error("Erro ao atualizar o usuario", err);
