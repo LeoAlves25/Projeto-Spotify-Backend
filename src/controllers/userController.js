@@ -41,7 +41,7 @@ userController.putUser = (req, res) =>{
 
 userController.getUserByEmail = (req, res) => {
   const email = req.params.email;
-
+  
   User.getUserByEmail(email, (err, result) => {
     if (err) {
       console.error("Erro ao buscar o usuário:", err);

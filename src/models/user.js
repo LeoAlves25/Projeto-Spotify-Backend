@@ -14,6 +14,7 @@ User.getAllUsers = async (callback) => {
 };
 
 User.postUser = async (user, callback) => {
+  console.log("teste")
   await db
     .query(
       `INSERT INTO \`user\` (firstName, lastName, email, \`password\`) 
@@ -28,12 +29,12 @@ User.postUser = async (user, callback) => {
     });
 };
 
-User.putUser = async (user,callback) =>{
+User.putUser = async (user,callback) =>{ 
   await db.query(`
   UPDATE user
   SET firstName = ?, lastName = ?, email = ?, password = ?
   WHERE id_user = ?
-  `,[user.firstName,user.lastName,user.email,user.password,user.id_user]
+  `,[user.firstName,user.lastName,user.email,user.password,user.id]
   )
   .then((result) => {
     callback(null, true);
@@ -51,6 +52,7 @@ User.getUserByEmail = async (email, callback) => {
       [email]
     )
     .then((result) => {
+      console.log(result[0][0])
       callback(null, result[0][0]);
     })
     .catch((err) => {
