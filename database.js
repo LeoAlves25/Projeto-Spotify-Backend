@@ -23,6 +23,6 @@ db.connect((err) => {
     } else {
       console.log('Conexão com o banco de dados MySQL estabelecida.');
     }
-  });
+});
   
 export default db;

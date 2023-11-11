@@ -74,4 +74,30 @@ playlistController.getPlaylistById = (req, res) => {
   });
 };
 
+playlistController.createPlaylist = (req, res) => {
+  const userEmail = req.body.email;
+
+  Playlist.createPlaylist(userEmail, (err, playlist) => {
+    if(err) {
+      console.error("Erro ao criar a Playlist:", err);
+      res.status(418).json({ error: "Fui tomar um chá" });
+    } else {
+      res.json(playlist);
+    }
+  });
+};
+
+playlistController.deletePlaylist = (req, res) => {
+  const playlistID = req.params.id;
+
+  Playlist.deletePlaylist(playlistID, (err, playlist) => {
+    if(err) {
+      console.error("Erro ao criar a Playlist:", err);
+      res.status(418).json({ error: "Fui tomar um chá" });
+    } else {
+      res.json(playlist);
+    }
+  });
+}
+
 export default playlistController;
