@@ -162,17 +162,17 @@ Playlist.createPlaylist = async (email, callback) => {
   await db
     .query(
       `
-        SET @idUser = (SELECT id_user FROM \`user\`
-          WHERE email = ?
-        ),
+      SET @idUser = (SELECT id_user FROM spotify.user
+				  WHERE email = ?
+				);
 
         INSERT INTO playlists (nome_playlist, descricao, capa, public, id_user)
-        VALUES ('Sua Playlist', 'Descrição da sua playlist', '/IMG/playlist.png', 0, @idUser)
+        VALUES ("Sua Playlist", "Descrição da sua playlist", "/IMG/playlist.png", 0, @idUser)
       `,
       [email]
     )
     .then((result) => {
-      callback(null, result);
+      callback(null, true);
     })
     .catch((err) => {
       console.log(err);
@@ -193,7 +193,8 @@ Playlist.deletePlaylist = async (id_playlist, callback) => {
   .then(() => {
     callback(null, true);
   })
-  .catch(() => {
+  .catch((err) => {
+    console.log(err)
     callback(null, false);
   });
 }
