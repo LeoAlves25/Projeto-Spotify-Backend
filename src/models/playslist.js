@@ -76,7 +76,6 @@ Playlist.getPrivatePlaylistsByUser = async (email, callback) => {
 }
 
 Playlist.getPlaylistsByUser = async (email, callback) => {
-  console.log(email)
   await db
     .query(
       `SELECT p.*, u.firstName, u.email
