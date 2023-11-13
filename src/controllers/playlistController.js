@@ -93,7 +93,29 @@ playlistController.deletePlaylist = (req, res) => {
   Playlist.deletePlaylist(playlistID, (err, playlist) => {
     if(err) {
       console.error("Erro ao criar a Playlist:", err);
-      res.status(418).json({ error: "Fui tomar um chá" });
+      res.status(418).json({ error: "Erro no servidor" });
+    } else {
+      res.json(playlist);
+    }
+  });
+}
+  playlistController.deleteMusicPlaylist = (req, res) => {
+    const playlistID = req.body;
+    Playlist.deleteMusicPlaylist(playlistID, (err, playlist) => {
+      if(err) {
+        console.error("Erro ao criar a Playlist:", err);
+        res.status(418).json({ error: "Erro no servidor" });
+      } else {
+        res.json(playlist);
+      }
+    });
+} 
+playlistController.createMusicPlaylist = (req, res) => {
+  const playlistID = req.body;
+  Playlist.createMusicPlaylist(playlistID, (err, playlist) => {
+    if(err) {
+      console.error("Erro ao criar a Playlist:", err);
+      res.status(418).json({ error: "Erro no servidor" });
     } else {
       res.json(playlist);
     }

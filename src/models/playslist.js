@@ -198,4 +198,36 @@ Playlist.deletePlaylist = async (id_playlist, callback) => {
   });
 }
 
+Playlist.deleteMusicPlaylist = async (ids, callback) => {
+  await db.query(
+    `
+    DELETE FROM playlists_musics p
+    WHERE p.id_playlists = ${ids.id_playlist} AND p.id_musics = ${ids.id_musica};
+  
+    `
+  )
+  .then(() => {
+    callback(null, true);
+  })
+  .catch((err) => {
+    console.log(err)
+    callback(null, false);
+  });
+}
+
+Playlist.createMusicPlaylist = async (ids, callback) => {
+  await db.query(
+    `
+    INSERT INTO playlists_musics (id_playlists, id_musics)
+    VALUES (${ids.id_playlist}, ${ids.id_musica});
+    `
+  )
+  .then(() => {
+    callback(null, true);
+  })
+  .catch((err) => {
+    console.log(err)
+    callback(null, false);
+  });
+}
 export default Playlist;
