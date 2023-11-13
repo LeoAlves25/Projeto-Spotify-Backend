@@ -1,3 +1,4 @@
+import e from "cors";
 import db from "../../database.js";
 
 const Playlist = {};
@@ -75,7 +76,6 @@ Playlist.getPrivatePlaylistsByUser = async (email, callback) => {
 }
 
 Playlist.getPlaylistsByUser = async (email, callback) => {
-  console.log(email)
   await db
     .query(
       `SELECT p.*, u.firstName, u.email
@@ -103,8 +103,7 @@ Playlist.getPlaylistsByUser = async (email, callback) => {
       console.log(err)
       callback(err, null);
     });
-
-}
+};
 
 Playlist.getAllPlaylistsWithUser = async (callback) => {
   await db
@@ -148,7 +147,7 @@ Playlist.getPlaylistById = async (id, callback) => {
             LEFT JOIN musics m ON pm.id_musics = m.id_musics
             JOIN user u ON p.id_user = u.id_user
             WHERE p.id_playlists = ?;`,
-            [id]
+      [id]
     )
     .then((result) => {
       callback(null, result[0][0].result.playlist);
@@ -157,5 +156,46 @@ Playlist.getPlaylistById = async (id, callback) => {
       callback(err, null);
     });
 };
+
+Playlist.createPlaylist = async (email, callback) => {
+  await db
+    .query(
+      `
+      SET @idUser = (SELECT id_user FROM spotify.user
+				  WHERE email = ?
+				);
+
+        INSERT INTO playlists (nome_playlist, descricao, capa, public, id_user)
+        VALUES ("Sua Playlist", "Descrição da sua playlist", "/IMG/playlist.png", 0, @idUser)
+      `,
+      [email]
+    )
+    .then((result) => {
+      callback(null, true);
+    })
+    .catch((err) => {
+      console.log(err);
+      callback(null, false);
+    });
+};
+
+Playlist.deletePlaylist = async (id_playlist, callback) => {
+  await db.query(
+    `
+      DELETE FROM playlists_musics
+      WHERE id_playlists = ${id_playlist};
+    
+      DELETE FROM playlists
+      WHERE id_playlists = ${id_playlist};
+    `
+  )
+  .then(() => {
+    callback(null, true);
+  })
+  .catch((err) => {
+    console.log(err)
+    callback(null, false);
+  });
+}
 
 export default Playlist;
