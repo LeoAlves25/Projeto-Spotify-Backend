@@ -4,7 +4,12 @@ const Music = {};
 
 Music.getAllMusics = async (callback) => {
     await db
-      .query("SELECT * FROM musics")
+      .query(`SELECT id_musics AS id,
+              titulo,
+              artista,
+              duracao,
+                  nome_arquivo_audio
+          FROM spotify.musics;`)
       .then((result) => {
         callback(null, result[0]);
       })
